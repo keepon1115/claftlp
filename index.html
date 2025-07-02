@@ -237,8 +237,17 @@
 
         /* コース紹介セクション */
         .courses {
-            background: #FFF8DC; /* クリーム色 */
+            background: #FFF8DC !important; /* クリーム色 */
+            background-color: #FFF8DC !important;
             color: var(--text-dark);
+            opacity: 1 !important;
+            visibility: visible !important;
+            transition: none !important;
+        }
+
+        .courses .course-card {
+            opacity: 1 !important;
+            visibility: visible !important;
         }
 
         .course-card {
@@ -836,7 +845,7 @@
     <!-- CLAFTとは？ -->
     <section class="about" id="about">
         <div class="container">
-            <h2 class="section-title">CLAFTは"学校と社会をつなぐ"スクール</h2>
+            <h2 class="section-title">"学校と社会をつなぐ"スクール</h2>
             <div class="about-content">
                 <div class="about-text">
                     <h3>「自分の手で創るキャリア」</h3>
@@ -914,7 +923,7 @@
                 <div class="course-header">
                     <div class="course-title-section">
                         <div class="course-emoji">⛏️</div>
-                        <h3 class="course-title">マインクラフトプログラミングコース</h3>
+                        <h3 class="course-title">マイクラプログラミングコース</h3>
                     </div>
                     <div class="course-image-container">
                         <img src="minecraft-course.png" alt="マインクラフトプログラミングコース">
@@ -972,13 +981,13 @@
     <!-- なぜ今、CLAFTが必要か -->
     <section class="why-now" id="why">
         <div class="container">
-            <h2 class="section-title">入試のための勉強、それって必要？？</h2>
+            <h2 class="section-title">入試のための勉強、<br>それって必要？？</h2>
             
             <div class="why-content">
                 <p class="problem-intro">
-                    「学校で一生懸命勉強したけど、社会に出ると違ってた」<br>
+                    「学校で一生懸命勉強したけど、<br>社会に出ると違ってた」<br>
                     「自分が本当にやりたいことってなんだろう…」<br><br>
-                    今の日本社会では、そんな声が多数あがっています。
+                    今の日本社会では、そんな声が多数あります。
                 </p>
                 
                 <div class="data-grid">
@@ -996,7 +1005,7 @@
                     </div>
                 </div>
                 
-                <p style="font-size: 1.3rem; margin-bottom: 2rem;">原因はシンプルで、「社会の変化に学びが追いついていない」ことが大きな原因です。</p>
+                <p style="font-size: 1.3rem; margin-bottom: 2rem;">原因はシンプルで、<br>「社会の変化に学びが追いついていない」<br>ことが大きな原因です。</p>
                 
                 <div class="gap-comparison">
                     <div class="gap-card school">
@@ -1018,7 +1027,7 @@
                 
                 <p style="font-size: 1.2rem; margin: 3rem 0;">
                     また、昨今のAIによる進化はすさまじく、認知能力はコンピュータの方が得意な時代に。<br>
-                    入試のための勉強から、社会を知り未来を予測するための学びへ変換する必要があると、考えています。
+                    入試のための勉強から、”社会を知り未来を予測するための学び”へと、変えていく必要があるとCLAFTでは考えています。
                 </p>
                 </div>
             </div>
@@ -1028,15 +1037,24 @@
     <!-- 説明会・申し込み -->
     <section class="cta-section" id="cta">
         <div class="cta-content">
-            <h2 class="cta-title">説明会と座談会を開催します！</h2>
+            <h2 class="cta-title">説明会と座談会を<br>開催します！</h2>
             
             <p style="font-size: 1.2rem; margin-bottom: 2rem;">
-                「ちょっと気になってきた」「もう少し話を聞きたい」<br>
+                「ちょっと気になってきた」<br>
+                「もう少し話を聞きたい」<br>
                 そんな方はお気軽にご参加ください！<br>
                 📅 7/27(日) なんでも発表会にて開催します。
             </p>
             
             <a href="https://forms.gle/SoUx7wFphgpT4raV6" class="cta-button" target="_blank" rel="noopener noreferrer">説明会に申し込む</a>
+
+            <p style="font-size: 1.2rem; margin-bottom: 2rem;">
+                9月開校に向け、8月から1ヶ月無料体験をはじめる予定です。<br>
+                以下の説明動画もご覧くださいませ。
+            </p>
+
+            <a href="https://youtu.be/aKDGSr1C5pM" class="cta-button" target="_blank" rel="noopener noreferrer">説明動画はこちら</a>
+
         </div>
     </section>
 
@@ -1059,7 +1077,7 @@
         
         // スクロールアニメーション
         function handleScrollAnimation() {
-            const elements = document.querySelectorAll('.course-card, .data-card, .gap-card, .about-content, .solution-box');
+            const elements = document.querySelectorAll('.data-card, .gap-card, .about-content, .solution-box');
             
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {

@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLAFT - 学校と社会をつなぐスクール</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #4A90E2;
+            --secondary-color: #F5A623;
+            --accent-color: #7ED321;
+            --dark-bg: #0f172a;
+            --light-bg: #f8fafc;
+            --text-dark: #1e293b;
+            --text-light: #94a3b8;
+            --gradient-1: linear-gradient(135deg, #4A90E2 0%, #5BA3F5 100%);
+            --gradient-2: linear-gradient(135deg, #F5A623 0%, #FFB84D 100%);
+            --gradient-3: linear-gradient(135deg, #7ED321 0%, #8FE832 100%);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* スムーススクロール */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* アニメーション */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        /* ヒーローセクション */
+        .hero {
+            min-height: 100vh;
+            background: var(--gradient-1);
+            background-size: 400% 400%;
+            animation: gradientMove 15s ease infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 2rem;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-content {
+            text-align: center;
+            color: white;
+            z-index: 2;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .hero-image-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.2);
+            overflow: hidden;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .hero-image-container::before {
+            content: '';
+        }
+
+        .hero-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            position: relative;
+            z-index: 1;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: pulse 2s infinite;
+            cursor: pointer;
+        }
+
+        .scroll-indicator svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+
+        /* セクション共通 */
+        section {
+            padding: 5rem 1rem;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* CLAFTとは？セクション */
+        .about {
+            background: var(--light-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 300px;
+            height: 300px;
+            background: var(--gradient-3);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            text-align: center;
+            margin-bottom: 3rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+
+        .about-content {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            align-items: stretch;
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-text {
+            flex: 1;
+            padding: 3rem;
+        }
+
+        .about-text h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .about-text p {
+            color: var(--text-dark);
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .about-image {
+            flex: 1;
+            background: linear-gradient(45deg, #f0f0f0 25%, #f8f8f8 25%, #f8f8f8 50%, #f0f0f0 50%, #f0f0f0 75%, #f8f8f8 75%, #f8f8f8);
+            background-size: 20px 20px;
+            position: relative;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about-image::before {
+            content: '';
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* コース紹介セクション */
+        .courses {
+            background: #FFF8DC; /* クリーム色 */
+            color: var(--text-dark);
+        }
+
+        .course-card {
+            background: white;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--gradient-2);
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .course-card:hover::before {
+            opacity: 0.3;
+        }
+
+        .course-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            gap: 2rem;
+        }
+
+        .course-title-section {
+            flex: 1;
+        }
+
+        .course-emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .course-title {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .course-image-container {
+            width: 150px;
+            height: 150px;
+            background: var(--light-bg);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed rgba(0,0,0,0.2);
+        }
+
+        .course-image-container::before {
+            content: '';
+        }
+
+        .course-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: relative;
+            z-index: 1;
+        }
+
+        .course-story {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            color: var(--text-dark);
+        }
+
+        .course-points {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .course-points h4 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .course-points ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .course-points li {
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .course-points li::before {
+            content: '✨';
+            position: absolute;
+            left: 0;
+        }
+
+        .recommend-box {
+            background: var(--gradient-1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(74, 144, 226, 0.3);
+        }
+
+        .recommend-box h4 {
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .recommend-box ul {
+            list-style: none;
+        }
+
+        .recommend-box li {
+            color: white;
+            line-height: 1.8;
+        }
+
+        /* なぜ今CLAFTが必要かセクション */
+        .why-now {
+            background: white;
+            position: relative;
+        }
+
+        .why-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .problem-intro {
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            color: var(--text-dark);
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .data-card {
+            background: var(--light-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .data-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .data-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .data-card:hover::after {
+            left: 100%;
+        }
+
+        .data-percentage {
+            font-size: clamp(2.5rem, 5vw, 3rem);
+            font-weight: bold;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .data-description {
+            margin-top: 0.5rem;
+            color: var(--text-dark);
+            font-size: clamp(0.9rem, 1.5vw, 1rem);
+        }
+
+        .gap-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin: 3rem 0;
+        }
+
+        .gap-card {
+            padding: 2rem;
+            border-radius: 15px;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .gap-card:hover {
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        .gap-card.school {
+            background: linear-gradient(135deg, #FFE5CC 0%, #FFD4A3 100%);
+            box-shadow: 0 5px 20px rgba(245, 166, 35, 0.2);
+        }
+
+        .gap-card.society {
+            background: linear-gradient(135deg, #CCE5FF 0%, #A3D4FF 100%);
+            box-shadow: 0 5px 20px rgba(74, 144, 226, 0.2);
+        }
+
+        .gap-card h3 {
+            margin-bottom: 1.5rem;
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
+            color: var(--text-dark);
+        }
+
+        .gap-card ul {
+            list-style: none;
+        }
+
+        .gap-card li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .gap-card li::before {
+            position: absolute;
+            left: 0;
+        }
+
+        .gap-card.school li::before {
+            content: '📚';
+        }
+
+        .gap-card.society li::before {
+            content: '🌍';
+        }
+
+        .solution-box {
+            background: var(--gradient-3);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            margin-top: 3rem;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(126, 211, 33, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solution-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: float 10s ease-in-out infinite;
+        }
+
+        .solution-box h3 {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .solution-points {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .solution-point {
+            background: rgba(255,255,255,0.2);
+            padding: 1.5rem;
+            border-radius: 15px;
+            flex: 1;
+            min-width: 200px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .solution-point:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* 説明会セクション */
+        .cta-section {
+            background: var(--gradient-1);
+            color: white;
+            text-align: center;
+            padding: 5rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-title {
+            font-size: clamp(2rem, 4vw, 2.5rem);
+            margin-bottom: 2rem;
+        }
+
+        .event-date {
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .benefits-list {
+            text-align: left;
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+
+        .benefits-list li {
+            list-style: none;
+            padding: 1rem 0;
+            padding-left: 2rem;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .benefits-list li::before {
+            content: '✔';
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: var(--primary-color);
+            padding: 1.5rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--secondary-color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            color: white;
+        }
+
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 768px) {
+            section {
+                padding: 3rem 1rem;
+            }
+
+            .hero {
+                min-height: 80vh;
+            }
+
+            .about-content {
+                flex-direction: column;
+            }
+
+            .about-text {
+                padding: 2rem;
+            }
+
+            .about-image {
+                min-height: 200px;
+            }
+
+            .course-header {
+                flex-direction: column;
+            }
+
+            .course-image-container {
+                align-self: center;
+                margin-top: 1rem;
+            }
+
+            .gap-comparison {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .solution-points {
+                flex-direction: column;
+            }
+
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-button {
+                padding: 1.2rem 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .about-text h3 {
+                font-size: 1.5rem;
+            }
+
+            .course-card {
+                padding: 2rem;
+            }
+
+            .solution-box {
+                padding: 2rem;
+            }
+
+            .hero-image-container {
+                max-width: 90%;
+            }
+        }
+
+        /* パーティクル背景 */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: floatParticle 20s infinite linear;
+        }
+
+        @keyframes floatParticle {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            to {
+                transform: translateY(-10vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* アクセシビリティ向上 */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* プリント時のスタイル */
+        @media print {
+            .particles,
+            .scroll-indicator,
+            .cta-button {
+                display: none;
+            }
+
+            section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- パーティクル背景 -->
+    <div class="particles" id="particles"></div>
+
+    <!-- ヒーローセクション -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-image-container">
+                <img src="hero-main.png" alt="CLAFT - 学校と社会をつなぐスクール">
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <svg viewBox="0 0 24 24">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- CLAFTとは？ -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title">CLAFTは"学校と社会をつなぐ"スクール</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>「自分の手で創るキャリア」</h3>
+                    <p>
+                        ゲームみたいに夢中になれる学びの場。<br>
+                        自分のペースで「クエスト」に挑戦し、<br>
+                        「Yononaka」で仲間と交流しながら、<br>
+                        自分と向き合い、好きや得意を磨いていきましょう！
+                    </p>
+                </div>
+                <div class="about-image">
+                    <img src="about-learning-scene.jpg" alt="CLAFTの学習風景">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 各コース紹介 -->
+    <section class="courses" id="courses">
+        <div class="container">
+            <h2 class="section-title">各コース紹介</h2>
+            
+            <!-- キャリアコース -->
+            <div class="course-card">
+                <div class="course-header">
+                    <div class="course-title-section">
+                        <div class="course-emoji">🖊</div>
+                        <h3 class="course-title">キャリアコース</h3>
+                    </div>
+                    <div class="course-image-container">
+                        <img src="career-course.png" alt="キャリアコース">
+                    </div>
+                </div>
+
+                
+                <p class="course-story">
+                    学校や塾の勉強は"正解のある問題"に早く答えることが求められます。<br>
+                    もちろんそれも大事ではありますが、社会に出たらどうでしょう？<br>
+                    日常の小さなことから世界を揺るがす大きな問題まで、正解が"ひとつでない"ことの方が多いですよね。<br><br>
+                    キャリアコースでは、正解がひとつでない問題に対して、"自分の意見を持ち、他者に共有する"ことを習慣化するカリキュラム。<br>
+                    探究と対話、社会課題への実践を通して、自分で自分のキャリアを"クラフト"していきます。
+                </p>
+
+                <div class="recommend-box">
+                    <h4>こんな人に学んでほしい！</h4>
+                    <ul>
+                        <li>💡 入試のための勉強に疑問を持っている人</li>
+                        <li>💡 夢中になれる学びを見つけたい人</li>
+                        <li>💡 将来が不安なので、社会を知り未来を予測したい人</li>
+                    </ul>
+                </div>
+                
+                <div class="course-points">
+                    <h4>カリキュラムの特徴</h4>
+                    <ul>
+                        <li>好奇心やモチベーションを維持するゲームの仕掛け</li>
+                        <li>社会で求められる非認知能力を、自己評価＆数値計測する仕組み</li>
+                        <li>実際に社会で活躍している人と交流できるきっかけ</li>
+                    </ul>
+                </div>
+                
+                <div class="course-points">
+                    <h4>内容・形式</h4>
+                    <ul>
+                        <li><strong>クエスト：</strong>学校で学ぶ機会が少ないが社会で大切な「お金・発表・生成AI・デジタルツール・プログラミング思考」が学べる15分程度の動画を視聴し、自分の意見を共有する。経営者・個人事業主の特別ワークも</li>
+                        <li><strong>ジブンクラフト：</strong>自己理解と目標設定のワーク、非認知能力計測とキャリアコンサルタントによる面談</li>
+                        <li><strong>Yononaka：</strong>月2回の対話ワーク、安心の少人数グループ、視点を広げる</li>
+                        <li><strong>ミライクラフト：</strong>発表会・イベント企画・社会課題へ仲間とチャレンジ、実践経験、未来づくりへ</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- マインクラフトプログラミングコース -->
+            <div class="course-card">
+                <div class="course-header">
+                    <div class="course-title-section">
+                        <div class="course-emoji">⛏️</div>
+                        <h3 class="course-title">マインクラフトプログラミングコース</h3>
+                    </div>
+                    <div class="course-image-container">
+                        <img src="minecraft-course.png" alt="マインクラフトプログラミングコース">
+                    </div>
+                </div>
+                
+                <p class="course-story">
+                    ただのゲームじゃ、もったいない。<br>
+                    大好きなマインクラフトの世界で、SDGsについて学び、創造的に表現しよう。<br><br>
+                    SDGsについて月1つのテーマを動画で学び、マインクラフト内で社会課題を再現・解決策を創造。<br>
+                    自分のペースで学び、自己学習力・探究心を育みます。
+                </p>
+
+                <div class="recommend-box">
+                    <h4>こんな人に学んでほしい！</h4>
+                    <ul>
+                        <li>💡 マインクラフトを学びに変えたい</li>
+                        <li>💡 SDGsや社会課題について自分の意見を持ちたい</li>
+                        <li>💡 自分の手で作品を創り、他者に発信したい</li>
+                    </ul>
+                </div>
+                
+                <div class="course-points">
+                    <h4>カリキュラムの特徴</h4>
+                    <ul>
+                        <li>SDGs（持続可能な開発目標）を楽しく理解する</li>
+                        <li>社会課題を「自分ごと」として考え、課題解決力・創造的表現を育む</li>
+                        <li>習熟度により、プログラミングの基礎から応用まで学べる</li>
+                    </ul>
+                </div>
+                
+                <div class="course-points">
+                    <h4>内容・形式</h4>
+                    <ul>
+                        <li>教育版マインクラフトで、社会課題を再現・解決策を創造</li>
+                        <li>プログラミングキャラクターのエージェントを使い、プログラミングの基礎(順次、繰返し、分岐)から応用(関数、変数、リスト)まで、マインクラフトの世界で実践</li>
+                        <li>オンライン専用プラットフォームで動画視聴・課題提出・フィードバックを完結</li>
+                        <li>課題提出を通してデジタルツールのノウハウ＆プレゼン力を育成</li>
+                        <li>定期ミーティングで一人ひとりをサポート</li>
+                    </ul>
+                </div>
+               
+                
+                <div class="course-points" style="background: rgba(126, 211, 33, 0.1); margin-top: 2rem;">
+                    <h4 style="color: var(--accent-color);">一緒に参加できます！</h4>
+                    <ul>
+                        <li>Yononaka（身近なテーマについて対話するワーク）</li>
+                        <li>ミライクラフト（発表会・イベント企画・社会課題へ仲間とチャレンジ）</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- なぜ今、CLAFTが必要か -->
+    <section class="why-now" id="why">
+        <div class="container">
+            <h2 class="section-title">入試のための勉強、それって必要？？</h2>
+            
+            <div class="why-content">
+                <p class="problem-intro">
+                    「学校で一生懸命勉強したけど、社会に出ると違ってた」<br>
+                    「自分が本当にやりたいことってなんだろう…」<br><br>
+                    今の日本社会では、そんな声が多数あがっています。
+                </p>
+                
+                <div class="data-grid">
+                    <div class="data-card">
+                        <div class="data-percentage">67%</div>
+                        <div class="data-description">新入社員が「スキル不足」を感じている</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-percentage">34%</div>
+                        <div class="data-description">社会人が3年以内に離職している</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="data-percentage">19%</div>
+                        <div class="data-description">日本の教育を「良い」と評価する人の割合</div>
+                    </div>
+                </div>
+                
+                <p style="font-size: 1.3rem; margin-bottom: 2rem;">原因はシンプルで、「社会の変化に学びが追いついていない」ことが大きな原因です。</p>
+                
+                <div class="gap-comparison">
+                    <div class="gap-card school">
+                        <h3>学校や塾で重視されるのは…</h3>
+                        <ul>
+                            <li>正解がある問題を、速く・正確に解く力<br>
+                            <span style="font-size: 1.4em; color: red; font-weight: bold;">認知能力</span></li>
+                        </ul>
+                    </div>
+                    <div class="gap-card society">
+                        <h3>でも社会で求められるのは…</h3>
+                        <ul>
+                            <li>正解がひとつではない問題に対して、<br>
+                            自分の意見を持ち、伝え、行動する力<br>
+                        　　<span style="font-size: 1.4em; color: red; font-weight: bold;">非認知能力</span></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <p style="font-size: 1.2rem; margin: 3rem 0;">
+                    また、昨今のAIによる進化はすさまじく、認知能力はコンピュータの方が得意な時代に。<br>
+                    入試のための勉強から、社会を知り未来を予測するための学びへ変換する必要があると、考えています。
+                </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 説明会・申し込み -->
+    <section class="cta-section" id="cta">
+        <div class="cta-content">
+            <h2 class="cta-title">説明会と座談会を開催します！</h2>
+            
+            <p style="font-size: 1.2rem; margin-bottom: 2rem;">
+                「ちょっと気になってきた」「もう少し話を聞きたい」<br>
+                そんな方はお気軽にご参加ください！<br>
+                📅 7/27(日) なんでも発表会にて開催します。
+            </p>
+            
+            <a href="https://forms.gle/SoUx7wFphgpT4raV6" class="cta-button" target="_blank" rel="noopener noreferrer">説明会に申し込む</a>
+        </div>
+    </section>
+
+    <script>
+        // パーティクル生成
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = window.innerWidth < 768 ? 30 : 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                particle.style.width = particle.style.height = (Math.random() * 3 + 2) + 'px';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // スクロールアニメーション
+        function handleScrollAnimation() {
+            const elements = document.querySelectorAll('.course-card, .data-card, .gap-card, .about-content, .solution-box');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            elements.forEach(element => {
+                element.style.opacity = '0';
+                observer.observe(element);
+            });
+        }
+        
+        // マウス追従エフェクト（デスクトップのみ）
+        function createMouseFollower() {
+            if (window.innerWidth < 768) return;
+            
+            const hero = document.querySelector('.hero');
+            let mouseX = 0;
+            let mouseY = 0;
+            let currentX = 0;
+            let currentY = 0;
+            
+            hero.addEventListener('mousemove', (e) => {
+                const rect = hero.getBoundingClientRect();
+                mouseX = (e.clientX - rect.left) / rect.width - 0.5;
+                mouseY = (e.clientY - rect.top) / rect.height - 0.5;
+            });
+            
+            function animate() {
+                currentX += (mouseX - currentX) * 0.1;
+                currentY += (mouseY - currentY) * 0.1;
+                
+                const heroContent = document.querySelector('.hero-content');
+                if (heroContent) {
+                    heroContent.style.transform = `translate(${currentX * 20}px, ${currentY * 20}px)`;
+                }
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+        }
+        
+        // スムーススクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const target = document.querySelector(targetId);
+                if (target) {
+                    const headerOffset = 0;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // カウントアップアニメーション
+        function animateCounter(element, target, duration = 2000) {
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current) + '%';
+            }, 16);
+        }
+        
+        // データカードのアニメーション
+        function animateDataCards() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const percentage = entry.target.querySelector('.data-percentage');
+                        const value = parseInt(percentage.textContent);
+                        percentage.textContent = '0%';
+                        setTimeout(() => {
+                            animateCounter(percentage, value);
+                        }, 200);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.5
+            });
+            
+            document.querySelectorAll('.data-card').forEach(card => {
+                observer.observe(card);
+            });
+        }
+        
+        // スクロールインジケーターのクリック
+        document.querySelector('.scroll-indicator').addEventListener('click', () => {
+            document.querySelector('.about').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // コースカードのタッチ対応
+        let touchStartY = 0;
+        document.querySelectorAll('.course-card').forEach(card => {
+            card.addEventListener('touchstart', (e) => {
+                touchStartY = e.touches[0].clientY;
+            });
+            
+            card.addEventListener('touchend', (e) => {
+                const touchEndY = e.changedTouches[0].clientY;
+                if (Math.abs(touchEndY - touchStartY) < 10) {
+                    card.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        card.style.transform = '';
+                    }, 200);
+                }
+            });
+        });
+        
+        // 画像遅延読み込み
+        function lazyLoadImages() {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        if (img.dataset.src) {
+                            img.src = img.dataset.src;
+                            img.style.display = 'block';
+                            img.parentElement.classList.add('loaded');
+                        }
+                        observer.unobserve(img);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('img').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+        
+        // リサイズ対応
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                if (window.innerWidth < 768) {
+                    // モバイル用の調整
+                    document.querySelectorAll('.hero-content').forEach(el => {
+                        el.style.transform = '';
+                    });
+                }
+            }, 250);
+        });
+        
+        // ページ読み込み時の初期化
+        window.addEventListener('load', () => {
+            createParticles();
+            handleScrollAnimation();
+            createMouseFollower();
+            animateDataCards();
+            lazyLoadImages();
+            
+            // パフォーマンス最適化
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(() => {
+                    // 非優先タスク
+                });
+            }
+        });
+        
+        // スクロールパフォーマンス最適化
+        let ticking = false;
+        function updateOnScroll() {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    // スクロール時の処理
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+        window.addEventListener('scroll', updateOnScroll);
+    </script>
+</body>
+</html>
